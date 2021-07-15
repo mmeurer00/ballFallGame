@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ball Fall Game</title>
+  </head>
+    <body>
+        <section style="display: flex; justify-content: center">
+            <div>
+                <center>
+                    <h1>Ball Fall Game</h1>
+                </center>
+                <canvas
+                    id="canvas"
+                    height="600"
+                    width="600"
+                    style="border: 1px solid black"
+                >
+                    The canvas is not supported!
+                </canvas>
+            </div>
+        </section>
+        <script>
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+            const canvasH = canvas.height;
+            const canvasW = canvas.width;
+
+            let ball = { x: 150, y: 100, r: 5}
+            let platformH = 10
+            let platformW = canvasW
+
+            function randomHoleX() {
+                return Math.floor(Math.random() * 270)
+            }
+
+            let platforms = [
+                { x:0 ,y: 150, holeX: randomHoleX(), holeW: 20},
+                { x:0 ,y: 250, holeX: randomHoleX(), holeW: 20},
+                { x:0 ,y: 200, holeX: randomHoleX(), holeW: 20}
+            ]
+            drawBall();
+            drawPlatforms();
+
+            function drawBall(){
+                ctx.beginPath()
+                ctx.arc(ball.x, ball.y, ball.r, 0, 2 * Math.PI)
+                ctx.fillStyle = "red"
+                ctx.fill()
+                ctx.closePath()
+            }
+
+            function drawPlatforms(){
+                platforms.forEach((platform) => {
+                    createPlatform(platform),
+                    createHole(platform)
+                })
+            }
+            function createPlatform(platform){
+                    ctx.beginPath()
+                    ctx.rect(platform.x, platform.y, platformW, platformH)
+                    ctx.fillStyle = "blue"
+                    ctx.fill()
+                    ctx.closePath()
+            }
+            function createHole(platform){
+                    ctx.beginPath()
+                    ctx.rect(platform.holeX, platform.y, platform.holeW, platformH)
+                    ctx.fillStyle = "white"
+                    ctx.fill()
+                    ctx.closePath()
+            }
+
+
+        </script>
+    </body>
+</html>
