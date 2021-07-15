@@ -27,10 +27,12 @@
             const canvasH = canvas.height;
             const canvasW = canvas.width;
 
-            let ball = { x: 150, y: 100, r: 5}
+            let ball = { x: 150, y: -10, r: 5}
             let platformH = 10
             let platformW = canvasW
             let platformDiff = 50
+            let platformSpeed = 3
+            let leftPressed = (rightPressed = false)
 
             function randomHoleX() {
                 return Math.floor(Math.random() * 270)
@@ -41,8 +43,30 @@
             drawBall();
             drawPlatforms();
             movePlatforms();
+            navigateBall();
+
+            function holdAndDrop(){
+                const firstPlatform = platforms[0]
+
+                if(ball.y > firstPlatform.y - ball.r){
+                    if(ball.x > firstPlatform.holeX && ball.x < firstPlatform.holeX + firstPlatform.holeW){
+                        ball.y += 30
+                    } else{
+                        ball.y = firstPlatform.y - ball.r
+                    }
+                } else {
+                    ball.y += 5
+                }
+            }
 
             function drawBall(){
+                if (leftPressed && ball.x - ball.r > 0) {
+                    ball.x -= 5
+                }
+                if (rightPressed && ball.x + ball.r < canvasW){
+                    ball.x += 5
+                }
+
                 ctx.beginPath()
                 ctx.arc(ball.x, ball.y, ball.r, 0, 2 * Math.PI)
                 ctx.fillStyle = "red"
@@ -51,9 +75,11 @@
             }
 
             function movePlatforms(){
+
                 let count = 0
+
                 setInterval(() => {
-                    if (count === platformDiff){
+                    if (count === Math.floor(platformDiff / platformSpeed) ) {
                         if(platforms.length > 10){
                             platforms.splice(0,4)
                         }
@@ -66,14 +92,20 @@
                         })
                         count = 0
                     }
-                    platforms.forEach((platform) => {
-                        platform.y -= 1
-                    })
+
+                    platforms.forEach((platform) => platform.y -= platformSpeed)
+
+                    holdAndDrop()
+
                     ctx.clearRect(0,0, canvasW, canvasH)
                     drawPlatforms()
                     drawBall()
                     count++
                 }, 20)
+            }
+
+            function addNewPlatform(){
+                count = 0
             }
 
             function drawPlatforms(){
@@ -82,6 +114,7 @@
                     createHole(platform)
                 })
             }
+
             function createPlatform(platform){
                     ctx.beginPath()
                     ctx.rect(platform.x, platform.y, platformW, platformH)
@@ -89,6 +122,7 @@
                     ctx.fill()
                     ctx.closePath()
             }
+            
             function createHole(platform){
                     ctx.beginPath()
                     ctx.rect(platform.holeX, platform.y, platform.holeW, platformH)
@@ -97,7 +131,36 @@
                     ctx.closePath()
             }
 
+            function nagivateBall() {
+                document.addEventListener("keydown", (e) => {
+                    if (e.getModifierState("Alt")) {
+                        if (e.key === "ArrowLeft") {
+                            moveSpeed = 10;
+                        }
 
+                        if (e.key === "ArrowRight") {
+                            moveSpeed = 10;
+                        }
+                    }
+                    if (e.key === "ArrowLeft") {
+                        leftPressed = true;
+                    }
+                    if (e.key === "ArrowRight") {
+                        rightPressed = true;
+                    }
+                });
+                document.addEventListener("keyup", (e) => {
+                    if (e.key === "ArrowLeft") {
+                        leftPressed = false;
+                    }
+
+                    if (e.key === "ArrowRight") {
+                        rightPressed = false;
+                    }
+
+                    moveSpeed = 2;
+                });
+            }
         </script>
     </body>
 </html>
