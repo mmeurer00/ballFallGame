@@ -15,7 +15,7 @@
           id="canvas"
           height="600"
           width="600"
-          style="border: 1px solid black"
+          style="border: 2px solid black"
           >Heyyy canvas is not supported</canvas
         >
       </div>
@@ -28,9 +28,9 @@
 
         let ball = { x: 150, y: 0, w: 15 };
         let platformH = 10;
-        let plSpeed = 1;
+        let platformSpeed = 1;
         let platformW = canvasW;
-        let plDiff = 50;
+        let platformDiff = 50;
         let leftPressed = (rightPressed = false);
         let moveSpeed = 2;
         let score = 0;
@@ -56,7 +56,7 @@
             if (interval) return;
             interval = setInterval(() => {
             checkGameOver();
-            if (count === Math.floor(plDiff / plSpeed)) {
+            if (count === Math.floor(platformDiff / platformSpeed)) {
                 if (platforms.length > 20) {
                 platforms.splice(0, 4);
                 }
@@ -64,7 +64,7 @@
                 count = 0;
             }
 
-            platforms.forEach((pl) => (pl.y -= plSpeed));
+            platforms.forEach((pl) => (pl.y -= platformSpeed));
 
             const closest = platforms.find(
                 (pl) => ball.y < pl.y + 10 && ball.y > pl.y - ball.w
@@ -108,7 +108,7 @@
             const lastPlatform = platforms[platforms.length - 1];
             platforms.push({
             x: 0,
-            y: lastPlatform.y + plDiff,
+            y: lastPlatform.y + platformDiff,
             holeX: randHoleX(),
             holeW: 20,
             });
@@ -170,7 +170,8 @@
             ctx.beginPath();
             ctx.fillStyle = "black";
             ctx.fill();
-            ctx.fillText("Score: " + score, 10, 10);
+            ctx.font = "20px Georgia";
+            ctx.fillText("Score: " + score, 30, 30);
             ctx.closePath();
         }
 
