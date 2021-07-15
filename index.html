@@ -30,16 +30,13 @@
             let ball = { x: 150, y: 100, r: 5}
             let platformH = 10
             let platformW = canvasW
+            let platformDiff = 50
 
             function randomHoleX() {
                 return Math.floor(Math.random() * 270)
             }
 
-            let platforms = [
-                { x:0 ,y: 150, holeX: randomHoleX(), holeW: 20},
-                { x:0 ,y: 250, holeX: randomHoleX(), holeW: 20},
-                { x:0 ,y: 200, holeX: randomHoleX(), holeW: 20}
-            ]
+            let platforms = [{ x:0 ,y: canvasH, holeX: randomHoleX(), holeW: 20}]
 
             drawBall();
             drawPlatforms();
@@ -54,13 +51,28 @@
             }
 
             function movePlatforms(){
+                let count = 0
                 setInterval(() => {
+                    if (count === platformDiff){
+                        if(platforms.length > 10){
+                            platforms.splice(0,4)
+                        }
+                        const lastPlatform = platforms[platforms.length -1]
+                        platforms.push({
+                            x: 0,
+                            y: lastPlatform.y + platformDiff,
+                            holeX: randomHoleX(),
+                            holeW: 20,
+                        })
+                        count = 0
+                    }
                     platforms.forEach((platform) => {
-                        platform.y -= 2
+                        platform.y -= 1
                     })
                     ctx.clearRect(0,0, canvasW, canvasH)
                     drawPlatforms()
                     drawBall()
+                    count++
                 }, 20)
             }
 
