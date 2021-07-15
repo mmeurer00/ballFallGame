@@ -40,8 +40,10 @@
                 { x:0 ,y: 250, holeX: randomHoleX(), holeW: 20},
                 { x:0 ,y: 200, holeX: randomHoleX(), holeW: 20}
             ]
+
             drawBall();
             drawPlatforms();
+            movePlatforms();
 
             function drawBall(){
                 ctx.beginPath()
@@ -49,6 +51,17 @@
                 ctx.fillStyle = "red"
                 ctx.fill()
                 ctx.closePath()
+            }
+
+            function movePlatforms(){
+                setInterval(() => {
+                    platforms.forEach((platform) => {
+                        platform.y -= 2
+                    })
+                    ctx.clearRect(0,0, canvasW, canvasH)
+                    drawPlatforms()
+                    drawBall()
+                }, 20)
             }
 
             function drawPlatforms(){
